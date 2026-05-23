@@ -22,8 +22,9 @@ android {
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId = "com.example.advanced_alarm_app"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://flutter.dev/to/review-gradle-config.
+        // The ringing layer depends on audioplayers + vibration which
+        // both require minSdk 23 (Marshmallow / Android 6.0). Pinning
+        // here so Gradle doesn't fall back to Flutter's default 21.
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
