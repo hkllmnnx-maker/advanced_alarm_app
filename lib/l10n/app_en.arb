@@ -1,0 +1,107 @@
+{
+  "@@locale": "en",
+
+  "appTitle": "Advanced Alarm",
+  "@appTitle": {
+    "description": "Application title"
+  },
+
+  "settingsTitle": "Settings",
+  "@settingsTitle": {},
+
+  "sectionAppearance": "Appearance",
+  "@sectionAppearance": {},
+
+  "sectionAlarms": "Alarms",
+  "@sectionAlarms": {},
+
+  "sectionDanger": "Danger zone",
+  "@sectionDanger": {},
+
+  "themeMode": "Theme",
+  "@themeMode": {},
+
+  "themeSystem": "System default",
+  "@themeSystem": {},
+
+  "themeLight": "Light",
+  "@themeLight": {},
+
+  "themeDark": "Dark",
+  "@themeDark": {},
+
+  "language": "Language",
+  "@language": {},
+
+  "languageArabic": "Arabic",
+  "@languageArabic": {},
+
+  "languageEnglish": "English",
+  "@languageEnglish": {},
+
+  "timeFormat": "Time format",
+  "@timeFormat": {},
+
+  "timeFormat24": "24-hour",
+  "@timeFormat24": {},
+
+  "timeFormat12": "12-hour",
+  "@timeFormat12": {},
+
+  "defaultSnooze": "Default snooze duration",
+  "@defaultSnooze": {},
+
+  "snoozeMinutes": "{minutes, plural, =1{1 minute} other{{minutes} minutes}}",
+  "@snoozeMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+
+  "defaultRingtone": "Default ringtone",
+  "@defaultRingtone": {},
+
+  "ringtoneClassic": "Classic Bell",
+  "@ringtoneClassic": {},
+
+  "ringtoneDigital": "Digital Beep",
+  "@ringtoneDigital": {},
+
+  "ringtoneGentle": "Gentle Chimes",
+  "@ringtoneGentle": {},
+
+  "ringtoneRooster": "Morning Rooster",
+  "@ringtoneRooster": {},
+
+  "ringtoneOcean": "Ocean Waves",
+  "@ringtoneOcean": {},
+
+  "resetAllAlarms": "Reset all alarms",
+  "@resetAllAlarms": {},
+
+  "resetAllAlarmsDescription": "Permanently delete every alarm. This action cannot be undone.",
+  "@resetAllAlarmsDescription": {},
+
+  "resetConfirmTitle": "Reset all alarms?",
+  "@resetConfirmTitle": {},
+
+  "resetConfirmMessage": "All alarms will be permanently deleted. This action cannot be undone.",
+  "@resetConfirmMessage": {},
+
+  "cancel": "Cancel",
+  "@cancel": {},
+
+  "delete": "Delete",
+  "@delete": {},
+
+  "alarmsResetSnack": "All alarms have been deleted.",
+  "@alarmsResetSnack": {},
+
+  "comingSoon": "Coming soon",
+  "@comingSoon": {},
+
+  "homeNoSettingsHint": "Tap the gear icon to open Settings.",
+  "@homeNoSettingsHint": {}
+}
