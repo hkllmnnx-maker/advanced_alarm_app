@@ -24,8 +24,11 @@ android {
 
     defaultConfig {
         applicationId = "com.example.advanced_alarm_app"
-        // android_alarm_manager_plus and flutter_local_notifications both
-        // require a minimum SDK of 24 (Android 7.0).
+        // android_alarm_manager_plus + flutter_local_notifications need
+        // minSdk 24 (Android 7.0); the ringing layer (audioplayers,
+        // vibration, wakelock_plus, sensors_plus) only needs 23. Pin
+        // explicitly to 24 so Gradle doesn't fall back to Flutter's
+        // default 21 on either branch's plugins.
         minSdk = 24
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode

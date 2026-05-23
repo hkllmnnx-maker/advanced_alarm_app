@@ -19,6 +19,10 @@ import 'ui/theme/app_theme.dart';
 /// 3. Alarm scheduling engine (notifications, timezones, AndroidAlarmManager).
 /// 4. `rescheduleAll()` so any alarm that should have already fired can be
 ///    replayed across reboots / process death.
+///
+/// The full-screen ringing experience (`lib/ringing/`) is launched on
+/// demand via [RingingScreen.route] when an alarm actually fires; it is
+/// not part of normal app startup.
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 

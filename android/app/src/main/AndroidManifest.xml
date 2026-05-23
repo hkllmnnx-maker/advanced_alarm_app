@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <!-- =================================================================== -->
-    <!-- Permissions required by the alarm scheduling engine                  -->
+    <!-- Permissions required by the alarm scheduling engine + ringing UX    -->
     <!-- =================================================================== -->
 
     <!-- Posting notifications (Android 13+) -->
@@ -22,7 +22,8 @@
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
     <uses-permission android:name="android.permission.USE_EXACT_ALARM"/>
 
-    <!-- Required by android_alarm_manager_plus on older OEM builds -->
+    <!-- Required by android_alarm_manager_plus on older OEM builds, and so
+         the alarm engine can reschedule alarms after a reboot. -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <!-- Foreground service that keeps the alarm UI alive when fired -->
@@ -31,8 +32,13 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE"/>
 
     <!-- Full-screen intent: lets us launch the alarm screen over the lock
-         screen on Android 14+ -->
+         screen on Android 10+ / 14+ -->
     <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT"/>
+
+    <!-- Wake the device + show on top of the keyguard. -->
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+    <uses-permission android:name="android.permission.TURN_SCREEN_ON" />
+    <uses-permission android:name="android.permission.SHOW_WHEN_LOCKED" />
 
     <!-- Request the user to whitelist us from battery optimization so that
          alarms still fire while the device is in Doze mode -->
@@ -45,6 +51,7 @@
         android:label="advanced_alarm_app"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -58,15 +65,26 @@
             android:windowSoftInputMode="adjustResize">
             <!-- Specifies an Android theme to apply to this Activity as soon as
                  the Android process has started. This theme is visible to the user
-                 while the Flutter UI initializes. After that, this theme continues
-                 to determine the Window background behind the Flutter UI. -->
+                 while the Flutter UI initializes. -->
             <meta-data
               android:name="io.flutter.embedding.android.NormalTheme"
               android:resource="@style/NormalTheme"
               />
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+
+            <!-- Full-screen-intent entry point used by the alarm engine.
+                 The scheduler posts a high-priority notification whose
+                 `fullScreenIntent` targets this same activity with this
+                 action, and the Dart side reads the action to know it
+                 should immediately push `RingingScreen` instead of the
+                 normal home. -->
+            <intent-filter>
+                <action android:name="com.advanced_alarm_app.action.RING" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 
@@ -128,9 +146,7 @@
 
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and
-         https://developer.android.com/reference/android/content/Intent#ACTION_PROCESS_TEXT.
-
-         In particular, this is used by the Flutter engine in io.flutter.plugin.text.ProcessTextPlugin. -->
+         https://developer.android.com/reference/android/content/Intent#ACTION_PROCESS_TEXT. -->
     <queries>
         <intent>
             <action android:name="android.intent.action.PROCESS_TEXT"/>

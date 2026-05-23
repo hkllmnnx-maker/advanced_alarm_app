@@ -1,5 +1,7 @@
 name: advanced_alarm_app
-description: "Advanced Alarm App - reliable scheduling engine, local persistence, modern UI and full localization."
+description: "Advanced Alarm App - reliable scheduling engine, local persistence, modern UI, full-screen ringing experience and full localization."
+# The following line prevents the package from being accidentally published to
+# pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none'
 version: 1.0.0+1
 
@@ -41,15 +43,27 @@ dependencies:
   intl: ^0.19.0
 
   # --- Audio playback (alarm sounds) ---
+  # Supports duck/loss/release events which we use to handle incoming
+  # calls and headphone unplugging in the ringing experience.
   audioplayers: ^6.1.0
 
   # --- ID generation (Agent-05: ui-editor) ---
   # uuid: generates stable unique ids for newly created alarms.
   uuid: ^4.5.1
 
+  # ---------------- Ringing experience (Agent-06) ---------------------------
+  # Vibration with custom patterns + per-pattern amplitude.
+  vibration: ^2.0.0
+  # Keeps the screen awake while the alarm is ringing.
+  wakelock_plus: ^1.2.8
+  # Accelerometer stream used to detect a "shake to dismiss" gesture.
+  sensors_plus: ^6.0.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+  # Recommended lint set.
   flutter_lints: ^5.0.0
 
 flutter:
