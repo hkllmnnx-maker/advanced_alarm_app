@@ -1,7 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'data/data.dart';
+import 'ui/screens/home_screen.dart';
+import 'ui/theme/app_theme.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,12 +23,25 @@ Future<void> main() async {
     }
   }
 
-  runApp(MyApp(dataLayerReady: dataLayerReady));
+  runApp(
+    ProviderScope(
+      child: AdvancedAlarmApp(dataLayerReady: dataLayerReady),
+    ),
+  );
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key, this.dataLayerReady = true});
+/// Root widget of the application.
+///
+/// Hooks up:
+///   * Light + dark Material 3 themes (auto-switched by the system).
+///   * The [HomeScreen] as the landing surface once the local data
+///     layer is ready.
+///   * A graceful fallback screen when the data layer failed to
+///     initialize, so the app never shows a black screen.
+class AdvancedAlarmApp extends StatelessWidget {
+  const AdvancedAlarmApp({super.key, this.dataLayerReady = true});
 
+  /// Set to `false` only when [AlarmDatabase.init] threw at startup.
   final bool dataLayerReady;
 
   @override
@@ -33,100 +49,51 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Advanced Alarm',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: _DataLayerStatusPage(dataLayerReady: dataLayerReady),
+      theme: AppTheme.light(),
+      darkTheme: AppTheme.dark(),
+      themeMode: ThemeMode.system,
+      home: dataLayerReady ? const HomeScreen() : const _StorageUnavailableView(),
     );
   }
 }
 
-/// Temporary landing page shown until Agent-03 (UI) takes over.
-///
-/// It proves the data layer was wired correctly: when the database is
-/// initialized we can call into [AlarmRepository] without crashing and
-/// show the live alarm count via the reactive stream.
-class _DataLayerStatusPage extends StatelessWidget {
-  const _DataLayerStatusPage({required this.dataLayerReady});
-
-  final bool dataLayerReady;
+/// Shown when the local Hive box could not be opened. The app stays
+/// usable enough to display the error and a help message, but no alarms
+/// can be persisted in this state.
+class _StorageUnavailableView extends StatelessWidget {
+  const _StorageUnavailableView();
 
   @override
   Widget build(BuildContext context) {
+    final ColorScheme scheme = Theme.of(context).colorScheme;
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Advanced Alarm – Data Layer'),
-      ),
+      appBar: AppBar(title: const Text('Advanced Alarm')),
       body: SafeArea(
         child: Center(
           child: Padding(
             padding: const EdgeInsets.all(24),
-            child: dataLayerReady
-                ? _ReadyView()
-                : const _ErrorView(),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Icon(Icons.error_outline_rounded,
+                    color: scheme.error, size: 64),
+                const SizedBox(height: 16),
+                Text(
+                  'Storage unavailable',
+                  style: Theme.of(context).textTheme.headlineSmall,
+                ),
+                const SizedBox(height: 8),
+                const Text(
+                  'The local alarm database failed to initialize. '
+                  'Please restart the app. If the issue persists, '
+                  'clearing the app storage will recover it.',
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
           ),
         ),
       ),
-    );
-  }
-}
-
-class _ReadyView extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final AlarmRepository repository = AlarmRepository.fromDatabase();
-    return StreamBuilder<List<Alarm>>(
-      stream: repository.watchAll(),
-      builder: (BuildContext context, AsyncSnapshot<List<Alarm>> snap) {
-        final List<Alarm> alarms = snap.data ?? const <Alarm>[];
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Icon(Icons.check_circle, color: Colors.green, size: 64),
-            const SizedBox(height: 16),
-            Text(
-              'Data layer ready',
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Stored alarms: ${alarms.length}',
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
-            const SizedBox(height: 24),
-            const Text(
-              'UI will be implemented by the next agent.',
-              textAlign: TextAlign.center,
-            ),
-          ],
-        );
-      },
-    );
-  }
-}
-
-class _ErrorView extends StatelessWidget {
-  const _ErrorView();
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        const Icon(Icons.error_outline, color: Colors.red, size: 64),
-        const SizedBox(height: 16),
-        Text(
-          'Storage unavailable',
-          style: Theme.of(context).textTheme.headlineSmall,
-        ),
-        const SizedBox(height: 8),
-        const Text(
-          'The local alarm database failed to initialize. '
-          'The app will keep running, but alarms cannot be saved.',
-          textAlign: TextAlign.center,
-        ),
-      ],
     );
   }
 }

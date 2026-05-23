@@ -28,6 +28,11 @@ dependencies:
   # mobile platforms during normal app runtime (initFlutter()).
   path_provider: ^2.1.4
 
+  # ---------------- UI Layer (Agent-04) ----------------
+  # Riverpod: declarative, compile-safe reactive state management.
+  # Binds the UI to the AlarmRepository stream without manual wiring.
+  flutter_riverpod: ^2.5.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
