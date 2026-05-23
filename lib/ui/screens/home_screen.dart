@@ -147,9 +147,9 @@ class _ErrorView extends StatelessWidget {
             Text(
               message,
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: scheme.onSurfaceVariant,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.bodySmall?.copyWith(color: scheme.onSurfaceVariant),
             ),
             const SizedBox(height: 16),
             FilledButton.tonalIcon(
@@ -197,7 +197,8 @@ class _AlarmListState extends ConsumerState<_AlarmList> {
     // breathing room on tablets / large screens.
     final double width = MediaQuery.sizeOf(context).width;
     final double horizontalPadding = width > 700
-        ? (width - 640) / 2 // center within a 640-wide column
+        ? (width - 640) /
+              2 // center within a 640-wide column
         : 16;
 
     return Scrollbar(
@@ -255,9 +256,9 @@ class _DismissibleAlarmCard extends ConsumerWidget {
             Text(
               'Delete',
               style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                    color: scheme.onErrorContainer,
-                    fontWeight: FontWeight.w700,
-                  ),
+                color: scheme.onErrorContainer,
+                fontWeight: FontWeight.w700,
+              ),
             ),
           ],
         ),

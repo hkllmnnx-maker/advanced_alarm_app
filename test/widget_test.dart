@@ -22,46 +22,44 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
-  testWidgets(
-    'App boots and shows the storage-unavailable fallback when '
-    'the data layer failed to initialize',
-    (WidgetTester tester) async {
-      // ---- Settings layer (merged from feat/settings) -------------------
-      SharedPreferences.setMockInitialValues(<String, Object>{});
-      final SettingsProvider settingsProvider =
-          await SettingsProvider.create();
+  testWidgets('App boots and shows the storage-unavailable fallback when '
+      'the data layer failed to initialize', (WidgetTester tester) async {
+    // ---- Settings layer (merged from feat/settings) -------------------
+    SharedPreferences.setMockInitialValues(<String, Object>{});
+    final SettingsProvider settingsProvider = await SettingsProvider.create();
 
-      // ---- Engine wiring (smoke-test fakes) -----------------------------
-      final FlutterLocalNotificationsPlugin plugin =
-          FlutterLocalNotificationsPlugin();
-      final NotificationService notifications =
-          NotificationService(plugin: plugin);
-      final PermissionService permissions = PermissionService(plugin);
-      final AlarmService alarmService = AlarmService(
-        notificationService: notifications,
-        permissionService: permissions,
-        repository: InMemoryAlarmRepository(),
-      );
+    // ---- Engine wiring (smoke-test fakes) -----------------------------
+    final FlutterLocalNotificationsPlugin plugin =
+        FlutterLocalNotificationsPlugin();
+    final NotificationService notifications = NotificationService(
+      plugin: plugin,
+    );
+    final PermissionService permissions = PermissionService(plugin);
+    final AlarmService alarmService = AlarmService(
+      notificationService: notifications,
+      permissionService: permissions,
+      repository: InMemoryAlarmRepository(),
+    );
 
-      await tester.pumpWidget(
-        MultiProvider(
-          providers: [
-            ChangeNotifierProvider<SettingsProvider>.value(
-                value: settingsProvider),
-            Provider<AlarmsResetController>.value(
-              value: const NoopAlarmsResetController(),
-            ),
-          ],
-          child: AdvancedAlarmApp(
-            dataLayerReady: false,
-            alarmService: alarmService,
-            permissionService: permissions,
+    await tester.pumpWidget(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider<SettingsProvider>.value(
+            value: settingsProvider,
           ),
+          Provider<AlarmsResetController>.value(
+            value: const NoopAlarmsResetController(),
+          ),
+        ],
+        child: AdvancedAlarmApp(
+          dataLayerReady: false,
+          alarmService: alarmService,
+          permissionService: permissions,
         ),
-      );
+      ),
+    );
 
-      expect(find.byType(MaterialApp), findsOneWidget);
-      expect(find.text('Storage unavailable'), findsOneWidget);
-    },
-  );
+    expect(find.byType(MaterialApp), findsOneWidget);
+    expect(find.text('Storage unavailable'), findsOneWidget);
+  });
 }

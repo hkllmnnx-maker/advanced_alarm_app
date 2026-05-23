@@ -12,10 +12,8 @@ import '../data/models/dismiss_method.dart';
 /// full-screen intent or a deep-link without coupling.
 @immutable
 class RingingPayload {
-  RingingPayload({
-    required this.alarm,
-    DateTime? firedAt,
-  }) : firedAt = firedAt ?? DateTime.now();
+  RingingPayload({required this.alarm, DateTime? firedAt})
+    : firedAt = firedAt ?? DateTime.now();
 
   /// Convenience factory: build a payload from raw fields. Useful for
   /// background isolates that may not have the full [Alarm] handy.

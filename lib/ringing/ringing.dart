@@ -10,6 +10,7 @@
 ///     (snooze / dismiss / cancel).
 library;
 
-export 'ringing_controller.dart' show RingingController, RingingResult, RingingPhase, RingingChallenge;
+export 'ringing_controller.dart'
+    show RingingController, RingingResult, RingingPhase, RingingChallenge;
 export 'ringing_payload.dart' show RingingPayload;
 export 'ringing_screen.dart' show RingingScreen;

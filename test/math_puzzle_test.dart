@@ -48,7 +48,9 @@ void main() {
   group('MathPuzzleGenerator', () {
     test('every generated puzzle satisfies isCorrect on its own answer', () {
       // Use a seeded Random for deterministic coverage.
-      final MathPuzzleGenerator gen = MathPuzzleGenerator(random: math.Random(42));
+      final MathPuzzleGenerator gen = MathPuzzleGenerator(
+        random: math.Random(42),
+      );
       for (int i = 0; i < 200; i++) {
         final MathPuzzle p = gen.next(
           difficulty: MathPuzzleDifficulty.values[i % 3],
@@ -62,22 +64,35 @@ void main() {
     });
 
     test('easy difficulty never produces multiplication', () {
-      final MathPuzzleGenerator gen = MathPuzzleGenerator(random: math.Random(1));
+      final MathPuzzleGenerator gen = MathPuzzleGenerator(
+        random: math.Random(1),
+      );
       for (int i = 0; i < 100; i++) {
         final MathPuzzle p = gen.next(difficulty: MathPuzzleDifficulty.easy);
         expect(p.op, isNot(MathOp.multiply));
       }
     });
 
-    test('subtraction never returns a negative answer at medium difficulty', () {
-      // Friendly UX: half-asleep users shouldn't have to type a minus sign.
-      final MathPuzzleGenerator gen = MathPuzzleGenerator(random: math.Random(7));
-      for (int i = 0; i < 200; i++) {
-        final MathPuzzle p = gen.next(difficulty: MathPuzzleDifficulty.medium);
-        if (p.op == MathOp.subtract) {
-          expect(p.answer >= 0, isTrue, reason: 'subtraction produced negative: $p');
+    test(
+      'subtraction never returns a negative answer at medium difficulty',
+      () {
+        // Friendly UX: half-asleep users shouldn't have to type a minus sign.
+        final MathPuzzleGenerator gen = MathPuzzleGenerator(
+          random: math.Random(7),
+        );
+        for (int i = 0; i < 200; i++) {
+          final MathPuzzle p = gen.next(
+            difficulty: MathPuzzleDifficulty.medium,
+          );
+          if (p.op == MathOp.subtract) {
+            expect(
+              p.answer >= 0,
+              isTrue,
+              reason: 'subtraction produced negative: $p',
+            );
+          }
         }
-      }
-    });
+      },
+    );
   });
 }

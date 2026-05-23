@@ -51,49 +51,34 @@ class ShakeToDismissSheet extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            const Icon(
-              Icons.vibration,
-              size: 56,
-            ),
+            const Icon(Icons.vibration, size: 56),
             const SizedBox(height: 12),
             const Text(
               'Shake to dismiss',
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.w700,
-              ),
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700),
             ),
             const SizedBox(height: 6),
             Text(
               'Shake your phone $shakesRequired times to stop the alarm.',
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: Theme.of(context).colorScheme.onSurface.withValues(
-                      alpha: 0.7,
-                    ),
+                color: Theme.of(
+                  context,
+                ).colorScheme.onSurface.withValues(alpha: 0.7),
               ),
             ),
             const SizedBox(height: 20),
             ClipRRect(
               borderRadius: BorderRadius.circular(8),
-              child: LinearProgressIndicator(
-                value: progress,
-                minHeight: 12,
-              ),
+              child: LinearProgressIndicator(value: progress, minHeight: 12),
             ),
             const SizedBox(height: 8),
             Text(
               '$shakeProgress / $shakesRequired',
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-              ),
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
             ),
             const SizedBox(height: 20),
-            TextButton(
-              onPressed: onCancel,
-              child: const Text('Keep ringing'),
-            ),
+            TextButton(onPressed: onCancel, child: const Text('Keep ringing')),
           ],
         ),
       ),

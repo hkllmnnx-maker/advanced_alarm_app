@@ -103,8 +103,9 @@ Future<void> _useTallSurface(WidgetTester tester) async {
 
 void main() {
   group('RingingScreen', () {
-    testWidgets('renders label, time digits and both action buttons',
-        (WidgetTester tester) async {
+    testWidgets('renders label, time digits and both action buttons', (
+      WidgetTester tester,
+    ) async {
       await _useTallSurface(tester);
       final Alarm alarm = Alarm(
         id: 'a1',
@@ -137,8 +138,9 @@ void main() {
       expect(find.byIcon(Icons.alarm_off), findsOneWidget);
     });
 
-    testWidgets('tap-to-dismiss flow completes with RingingResult.dismissed',
-        (WidgetTester tester) async {
+    testWidgets('tap-to-dismiss flow completes with RingingResult.dismissed', (
+      WidgetTester tester,
+    ) async {
       await _useTallSurface(tester);
       final Alarm alarm = Alarm(
         id: 'a2',
@@ -170,8 +172,9 @@ void main() {
       expect(result, RingingResult.dismissed);
     });
 
-    testWidgets('Snooze button finishes with RingingResult.snoozed',
-        (WidgetTester tester) async {
+    testWidgets('Snooze button finishes with RingingResult.snoozed', (
+      WidgetTester tester,
+    ) async {
       await _useTallSurface(tester);
       final Alarm alarm = Alarm(
         id: 'a3',

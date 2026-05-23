@@ -47,18 +47,20 @@ class WeekdaySelector extends StatelessWidget {
     return Wrap(
       spacing: 8,
       runSpacing: 8,
-      children: _labels.map((_WeekdayLabel item) {
-        final bool isSelected = selected.contains(item.day);
-        return _DayChip(
-          label: item.shortLabel,
-          isSelected: isSelected,
-          onTap: () => _toggle(item.day),
-          activeColor: cs.primary,
-          activeForeground: cs.onPrimary,
-          inactiveColor: cs.surfaceContainerHighest,
-          inactiveForeground: cs.onSurfaceVariant,
-        );
-      }).toList(growable: false),
+      children: _labels
+          .map((_WeekdayLabel item) {
+            final bool isSelected = selected.contains(item.day);
+            return _DayChip(
+              label: item.shortLabel,
+              isSelected: isSelected,
+              onTap: () => _toggle(item.day),
+              activeColor: cs.primary,
+              activeForeground: cs.onPrimary,
+              inactiveColor: cs.surfaceContainerHighest,
+              inactiveForeground: cs.onSurfaceVariant,
+            );
+          })
+          .toList(growable: false),
     );
   }
 }
@@ -104,8 +106,7 @@ class _DayChip extends StatelessWidget {
           onTap: onTap,
           borderRadius: BorderRadius.circular(20),
           child: Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
             child: AnimatedDefaultTextStyle(
               duration: const Duration(milliseconds: 180),
               style: TextStyle(

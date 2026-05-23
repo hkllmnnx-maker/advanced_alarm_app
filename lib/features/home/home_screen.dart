@@ -26,11 +26,7 @@ class HomeScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Icon(
-                  Icons.alarm,
-                  size: 96,
-                  color: colorScheme.primary,
-                ),
+                Icon(Icons.alarm, size: 96, color: colorScheme.primary),
                 const SizedBox(height: 24),
                 Text(
                   AppConstants.appName,

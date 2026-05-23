@@ -21,12 +21,17 @@ class Alarm {
     this.snoozeDurationMinutes = 5,
     this.soundPath,
     this.vibrate = true,
-  })  : assert(id >= 0, 'Alarm id must be non-negative.'),
-        assert(
-          repeatDays.every((int d) => d >= DateTime.monday && d <= DateTime.sunday),
-          'repeatDays entries must be in the range 1..7 (DateTime.monday..sunday).',
-        ),
-        assert(snoozeDurationMinutes > 0, 'snoozeDurationMinutes must be positive.');
+  }) : assert(id >= 0, 'Alarm id must be non-negative.'),
+       assert(
+         repeatDays.every(
+           (int d) => d >= DateTime.monday && d <= DateTime.sunday,
+         ),
+         'repeatDays entries must be in the range 1..7 (DateTime.monday..sunday).',
+       ),
+       assert(
+         snoozeDurationMinutes > 0,
+         'snoozeDurationMinutes must be positive.',
+       );
 
   /// Stable, unique identifier for this alarm.
   ///
@@ -86,14 +91,16 @@ class Alarm {
       enabled: enabled ?? this.enabled,
       label: label ?? this.label,
       repeatDays: repeatDays ?? this.repeatDays,
-      snoozeDurationMinutes: snoozeDurationMinutes ?? this.snoozeDurationMinutes,
+      snoozeDurationMinutes:
+          snoozeDurationMinutes ?? this.snoozeDurationMinutes,
       soundPath: soundPath ?? this.soundPath,
       vibrate: vibrate ?? this.vibrate,
     );
   }
 
   @override
-  String toString() => 'Alarm(id: $id, dateTime: $dateTime, enabled: $enabled, '
+  String toString() =>
+      'Alarm(id: $id, dateTime: $dateTime, enabled: $enabled, '
       'label: "$label", repeatDays: $repeatDays, '
       'snoozeDurationMinutes: $snoozeDurationMinutes, vibrate: $vibrate)';
 }

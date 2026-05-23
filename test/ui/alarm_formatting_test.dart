@@ -65,10 +65,16 @@ void main() {
 
   group('AlarmFormatting.orderedDays', () {
     test('returns days in Monday → Sunday order regardless of input order', () {
-      final List<Weekday> ordered = AlarmFormatting.orderedDays(
-        <Weekday>{Weekday.sunday, Weekday.tuesday, Weekday.friday},
-      );
-      expect(ordered, <Weekday>[Weekday.tuesday, Weekday.friday, Weekday.sunday]);
+      final List<Weekday> ordered = AlarmFormatting.orderedDays(<Weekday>{
+        Weekday.sunday,
+        Weekday.tuesday,
+        Weekday.friday,
+      });
+      expect(ordered, <Weekday>[
+        Weekday.tuesday,
+        Weekday.friday,
+        Weekday.sunday,
+      ]);
     });
   });
 

@@ -36,8 +36,11 @@ void main() {
       };
 
       final error = Exception('boom');
-      GlobalErrorHandler.recordError(error, StackTrace.current,
-          context: 'unit-test');
+      GlobalErrorHandler.recordError(
+        error,
+        StackTrace.current,
+        context: 'unit-test',
+      );
 
       expect(captured, hasLength(1));
     });
@@ -96,10 +99,8 @@ void main() {
 
       // Must not throw.
       expect(
-        () => GlobalErrorHandler.recordError(
-          Exception('x'),
-          StackTrace.current,
-        ),
+        () =>
+            GlobalErrorHandler.recordError(Exception('x'), StackTrace.current),
         returnsNormally,
       );
     });

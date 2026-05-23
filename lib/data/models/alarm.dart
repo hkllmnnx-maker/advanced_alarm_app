@@ -36,15 +36,15 @@ class Alarm {
     DateTime? createdAt,
     DateTime? updatedAt,
     this.dismissMethod = DismissMethod.tap,
-  })  : assert(hour >= 0 && hour <= 23, 'hour must be in 0..23'),
-        assert(minute >= 0 && minute <= 59, 'minute must be in 0..59'),
-        assert(snoozeDurationMinutes >= 0, 'snoozeDurationMinutes must be >= 0'),
-        assert(snoozeCount >= 0, 'snoozeCount must be >= 0'),
-        repeatDays = repeatDays == null
-            ? <Weekday>{}
-            : Set<Weekday>.unmodifiable(repeatDays),
-        createdAt = createdAt ?? DateTime.now(),
-        updatedAt = updatedAt ?? createdAt ?? DateTime.now();
+  }) : assert(hour >= 0 && hour <= 23, 'hour must be in 0..23'),
+       assert(minute >= 0 && minute <= 59, 'minute must be in 0..59'),
+       assert(snoozeDurationMinutes >= 0, 'snoozeDurationMinutes must be >= 0'),
+       assert(snoozeCount >= 0, 'snoozeCount must be >= 0'),
+       repeatDays = repeatDays == null
+           ? <Weekday>{}
+           : Set<Weekday>.unmodifiable(repeatDays),
+       createdAt = createdAt ?? DateTime.now(),
+       updatedAt = updatedAt ?? createdAt ?? DateTime.now();
 
   final String id;
   final String label;
@@ -135,14 +135,18 @@ class Alarm {
         (map['repeatDays'] as List<dynamic>?) ?? const <dynamic>[];
     final Set<Weekday> days = <Weekday>{};
     for (final dynamic raw in rawDays) {
-      final Weekday? d =
-          Weekday.fromValue(raw is int ? raw : int.tryParse('$raw'));
+      final Weekday? d = Weekday.fromValue(
+        raw is int ? raw : int.tryParse('$raw'),
+      );
       if (d != null) days.add(d);
     }
 
     DateTime parseTs(dynamic value) {
       if (value is int) {
-        return DateTime.fromMillisecondsSinceEpoch(value, isUtc: true).toLocal();
+        return DateTime.fromMillisecondsSinceEpoch(
+          value,
+          isUtc: true,
+        ).toLocal();
       }
       return DateTime.now();
     }
@@ -158,8 +162,7 @@ class Alarm {
       snoozeDurationMinutes:
           (map['snoozeDurationMinutes'] as int?)?.clamp(0, 60) ?? 5,
       snoozeCount: (map['snoozeCount'] as int?)?.clamp(0, 20) ?? 3,
-      gradualVolumeIncrease:
-          (map['gradualVolumeIncrease'] as bool?) ?? true,
+      gradualVolumeIncrease: (map['gradualVolumeIncrease'] as bool?) ?? true,
       isEnabled: (map['isEnabled'] as bool?) ?? true,
       createdAt: parseTs(map['createdAt']),
       updatedAt: parseTs(map['updatedAt']),
@@ -189,21 +192,21 @@ class Alarm {
 
   @override
   int get hashCode => Object.hash(
-        id,
-        label,
-        hour,
-        minute,
-        Object.hashAllUnordered(repeatDays),
-        ringtonePath,
-        vibrate,
-        snoozeDurationMinutes,
-        snoozeCount,
-        gradualVolumeIncrease,
-        isEnabled,
-        createdAt,
-        updatedAt,
-        dismissMethod,
-      );
+    id,
+    label,
+    hour,
+    minute,
+    Object.hashAllUnordered(repeatDays),
+    ringtonePath,
+    vibrate,
+    snoozeDurationMinutes,
+    snoozeCount,
+    gradualVolumeIncrease,
+    isEnabled,
+    createdAt,
+    updatedAt,
+    dismissMethod,
+  );
 
   @override
   String toString() {

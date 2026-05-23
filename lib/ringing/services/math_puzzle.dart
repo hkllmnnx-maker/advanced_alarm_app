@@ -62,7 +62,8 @@ enum MathPuzzleDifficulty {
 /// A custom [math.Random] can be injected for reproducible tests; in
 /// production we use a fresh seedless [math.Random] per generator.
 class MathPuzzleGenerator {
-  MathPuzzleGenerator({math.Random? random}) : _random = random ?? math.Random();
+  MathPuzzleGenerator({math.Random? random})
+    : _random = random ?? math.Random();
 
   final math.Random _random;
 

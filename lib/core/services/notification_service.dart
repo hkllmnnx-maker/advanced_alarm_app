@@ -21,7 +21,10 @@ class NotificationActions {
 /// Encoded as `"alarmId|fireMillisUtc"` so the background isolate can
 /// reconstruct it without a JSON dependency.
 class AlarmNotificationPayload {
-  const AlarmNotificationPayload({required this.alarmId, required this.fireMillisUtc});
+  const AlarmNotificationPayload({
+    required this.alarmId,
+    required this.fireMillisUtc,
+  });
 
   final int alarmId;
   final int fireMillisUtc;
@@ -54,7 +57,7 @@ class AlarmNotificationPayload {
 /// — they are assigned in [initialize].
 class NotificationService {
   NotificationService({FlutterLocalNotificationsPlugin? plugin})
-      : plugin = plugin ?? FlutterLocalNotificationsPlugin();
+    : plugin = plugin ?? FlutterLocalNotificationsPlugin();
 
   /// The underlying plugin instance. Exposed so other services
   /// ([PermissionService], [AlarmService]) can share a single instance.
@@ -88,8 +91,9 @@ class NotificationService {
     }
 
     // 2) Platform-specific init settings.
-    const AndroidInitializationSettings android =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
+    const AndroidInitializationSettings android = AndroidInitializationSettings(
+      '@mipmap/ic_launcher',
+    );
 
     final DarwinInitializationSettings darwin = DarwinInitializationSettings(
       requestAlertPermission: false,
@@ -133,7 +137,9 @@ class NotificationService {
     // 3) Create the high-priority alarm channel (Android 8+).
     if (Platform.isAndroid) {
       final AndroidFlutterLocalNotificationsPlugin? android = plugin
-          .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
+          .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin
+          >();
 
       const AndroidNotificationChannel channel = AndroidNotificationChannel(
         AppConstants.alarmChannelId,
@@ -195,10 +201,6 @@ class NotificationService {
       categoryIdentifier: AppConstants.alarmChannelId,
     );
 
-    return NotificationDetails(
-      android: android,
-      iOS: darwin,
-      macOS: darwin,
-    );
+    return NotificationDetails(android: android, iOS: darwin, macOS: darwin);
   }
 }

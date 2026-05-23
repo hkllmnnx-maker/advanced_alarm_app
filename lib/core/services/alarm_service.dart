@@ -60,9 +60,9 @@ class AlarmService {
     required NotificationService notificationService,
     required PermissionService permissionService,
     required AlarmRepository repository,
-  })  : _notifications = notificationService,
-        _permissions = permissionService,
-        _repository = repository;
+  }) : _notifications = notificationService,
+       _permissions = permissionService,
+       _repository = repository;
 
   final NotificationService _notifications;
   // ignore: unused_field
@@ -153,7 +153,9 @@ class AlarmService {
         rescheduled++;
       } catch (e, st) {
         if (kDebugMode) {
-          debugPrint('AlarmService.rescheduleAll: failed for ${alarm.id}: $e\n$st');
+          debugPrint(
+            'AlarmService.rescheduleAll: failed for ${alarm.id}: $e\n$st',
+          );
         }
       }
     }
@@ -174,7 +176,9 @@ class AlarmService {
     await _notifications.plugin.cancel(alarmId);
 
     final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
-    final tz.TZDateTime nextFire = now.add(Duration(minutes: alarm.snoozeDurationMinutes));
+    final tz.TZDateTime nextFire = now.add(
+      Duration(minutes: alarm.snoozeDurationMinutes),
+    );
 
     await _notifications.plugin.zonedSchedule(
       alarmId,
@@ -351,14 +355,18 @@ class AlarmService {
       if (Platform.isAndroid) {
         try {
           await AndroidAlarmManager.cancel(slotId + _aampIdOffset);
-        } catch (_) {/* best-effort */}
+        } catch (_) {
+          /* best-effort */
+        }
       }
     }
 
     if (Platform.isAndroid) {
       try {
         await AndroidAlarmManager.cancel(alarmId + _aampIdOffset);
-      } catch (_) {/* best-effort */}
+      } catch (_) {
+        /* best-effort */
+      }
     }
   }
 
@@ -369,7 +377,8 @@ class AlarmService {
     return alarmId * 10 + weekday;
   }
 
-  String _titleFor(Alarm alarm) => alarm.label.isNotEmpty ? alarm.label : 'Alarm';
+  String _titleFor(Alarm alarm) =>
+      alarm.label.isNotEmpty ? alarm.label : 'Alarm';
 
   String _bodyFor(Alarm alarm, {bool snoozed = false}) {
     final String suffix = snoozed ? ' (snoozed)' : '';

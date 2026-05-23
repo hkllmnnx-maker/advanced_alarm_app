@@ -58,31 +58,35 @@ class DismissMethodSelector extends StatelessWidget {
         if (stacked) {
           return Column(
             children: _options
-                .map((_DismissOption o) => Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 4),
-                      child: _DismissCard(
-                        option: o,
-                        isSelected: o.method == selected,
-                        onTap: () => _select(o.method),
-                        cs: cs,
-                      ),
-                    ))
+                .map(
+                  (_DismissOption o) => Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4),
+                    child: _DismissCard(
+                      option: o,
+                      isSelected: o.method == selected,
+                      onTap: () => _select(o.method),
+                      cs: cs,
+                    ),
+                  ),
+                )
                 .toList(growable: false),
           );
         }
         return Row(
           children: _options
-              .map((_DismissOption o) => Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4),
-                      child: _DismissCard(
-                        option: o,
-                        isSelected: o.method == selected,
-                        onTap: () => _select(o.method),
-                        cs: cs,
-                      ),
+              .map(
+                (_DismissOption o) => Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    child: _DismissCard(
+                      option: o,
+                      isSelected: o.method == selected,
+                      onTap: () => _select(o.method),
+                      cs: cs,
                     ),
-                  ))
+                  ),
+                ),
+              )
               .toList(growable: false),
         );
       },
@@ -150,9 +154,7 @@ class _DismissCard extends StatelessWidget {
                   option.title,
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
-                    color: isSelected
-                        ? cs.onPrimaryContainer
-                        : cs.onSurface,
+                    color: isSelected ? cs.onPrimaryContainer : cs.onSurface,
                   ),
                 ),
                 const SizedBox(height: 2),

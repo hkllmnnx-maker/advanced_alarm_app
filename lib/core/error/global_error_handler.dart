@@ -92,13 +92,15 @@ class GlobalErrorHandler {
     bool silent = false,
   }) {
     try {
-      reporter(ErrorRecord(
-        error: error,
-        stackTrace: stackTrace,
-        context: context,
-        library: library,
-        silent: silent,
-      ));
+      reporter(
+        ErrorRecord(
+          error: error,
+          stackTrace: stackTrace,
+          context: context,
+          library: library,
+          silent: silent,
+        ),
+      );
     } catch (_) {
       // Never let the reporter itself crash the app.
     }
@@ -123,7 +125,8 @@ void _defaultReporter(ErrorRecord record) {
 
   developer.log(
     'Unhandled error: ${record.error}',
-    name: 'advanced_alarm_app${record.library != null ? '.${record.library}' : ''}',
+    name:
+        'advanced_alarm_app${record.library != null ? '.${record.library}' : ''}',
     error: record.error,
     stackTrace: record.stackTrace,
   );

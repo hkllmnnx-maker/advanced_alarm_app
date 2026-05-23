@@ -180,7 +180,9 @@ class AlarmAudioPlayer {
       await _player.play(source, volume: _currentVolume);
     } catch (e) {
       if (kDebugMode) {
-        debugPrint('AlarmAudioPlayer.play primary failed: $e — trying fallback');
+        debugPrint(
+          'AlarmAudioPlayer.play primary failed: $e — trying fallback',
+        );
       }
       // Try the bundled fallback so a broken / missing user-selected
       // ringtone never produces a completely silent alarm.
@@ -201,7 +203,8 @@ class AlarmAudioPlayer {
     if (ringtonePath.isEmpty) {
       return AssetSource(_fallbackAsset);
     }
-    if (ringtonePath.startsWith('asset:') || ringtonePath.startsWith('assets/')) {
+    if (ringtonePath.startsWith('asset:') ||
+        ringtonePath.startsWith('assets/')) {
       final String assetKey = ringtonePath.startsWith('asset:')
           ? ringtonePath.substring('asset:'.length)
           : ringtonePath;

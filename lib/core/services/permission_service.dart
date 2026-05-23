@@ -31,7 +31,10 @@ class AlarmPermissionStatus {
 
   /// `true` when every permission required by the engine is granted.
   bool get allGranted =>
-      notifications && exactAlarm && fullScreenIntent && ignoreBatteryOptimizations;
+      notifications &&
+      exactAlarm &&
+      fullScreenIntent &&
+      ignoreBatteryOptimizations;
 
   @override
   String toString() =>
@@ -76,7 +79,9 @@ class PermissionService {
 
     // Android.
     final AndroidFlutterLocalNotificationsPlugin? android = _notifications
-        .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
+        .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin
+        >();
 
     final bool notifications =
         (await android?.areNotificationsEnabled()) ?? false;
@@ -113,7 +118,9 @@ class PermissionService {
 
     if (Platform.isIOS) {
       final IOSFlutterLocalNotificationsPlugin? ios = _notifications
-          .resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>();
+          .resolvePlatformSpecificImplementation<
+            IOSFlutterLocalNotificationsPlugin
+          >();
       await ios?.requestPermissions(
         alert: true,
         badge: true,
@@ -125,7 +132,9 @@ class PermissionService {
 
     // ---- Android ----
     final AndroidFlutterLocalNotificationsPlugin? android = _notifications
-        .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
+        .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin
+        >();
 
     // 1) POST_NOTIFICATIONS (Android 13+) – delegate to the plugin which
     //    routes to the correct system dialog.

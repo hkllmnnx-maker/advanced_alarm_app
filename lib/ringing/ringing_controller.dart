@@ -31,19 +31,10 @@ enum RingingResult {
 
 /// What is currently blocking dismissal — used by the UI to render the
 /// correct challenge widget.
-enum RingingChallenge {
-  none,
-  mathPuzzle,
-  shake,
-}
+enum RingingChallenge { none, mathPuzzle, shake }
 
 /// Top-level lifecycle state of a single ringing session.
-enum RingingPhase {
-  idle,
-  ringing,
-  challengeInProgress,
-  finished,
-}
+enum RingingPhase { idle, ringing, challengeInProgress, finished }
 
 /// Orchestrates every moving part of a single firing alarm:
 ///
@@ -68,10 +59,10 @@ class RingingController extends ChangeNotifier with WidgetsBindingObserver {
     AlarmVibrator? vibrator,
     ShakeDetector? shakeDetector,
     WakelockGuard? wakelock,
-  })  : _audio = audioPlayer ?? AlarmAudioPlayer(),
-        _vibrator = vibrator ?? AlarmVibrator(),
-        _shake = shakeDetector ?? ShakeDetector(),
-        _wakelock = wakelock ?? WakelockGuard();
+  }) : _audio = audioPlayer ?? AlarmAudioPlayer(),
+       _vibrator = vibrator ?? AlarmVibrator(),
+       _shake = shakeDetector ?? ShakeDetector(),
+       _wakelock = wakelock ?? WakelockGuard();
 
   final RingingPayload payload;
   Alarm get alarm => payload.alarm;
@@ -117,14 +108,17 @@ class RingingController extends ChangeNotifier with WidgetsBindingObserver {
     WidgetsBinding.instance.addObserver(this);
 
     await _wakelock.acquire();
-    await _vibrator.start().then((_) {
-      // Don't fail the whole alarm if vibration died — log only.
-      return;
-    }).catchError((Object e, StackTrace st) {
-      if (kDebugMode) {
-        debugPrint('RingingController vibrator.start error: $e\n$st');
-      }
-    });
+    await _vibrator
+        .start()
+        .then((_) {
+          // Don't fail the whole alarm if vibration died — log only.
+          return;
+        })
+        .catchError((Object e, StackTrace st) {
+          if (kDebugMode) {
+            debugPrint('RingingController vibrator.start error: $e\n$st');
+          }
+        });
 
     if (!alarm.vibrate) {
       await _vibrator.stop();
@@ -262,12 +256,14 @@ class RingingController extends ChangeNotifier with WidgetsBindingObserver {
         _isPausedByLifecycle = false;
         if (_phase == RingingPhase.ringing ||
             _phase == RingingPhase.challengeInProgress) {
-          unawaited(_audio.start(
-            ringtonePath: alarm.ringtonePath,
-            // On resume we skip the gradual ramp so the user gets the
-            // full alarm immediately — they're already half-aware.
-            gradualVolumeRise: false,
-          ));
+          unawaited(
+            _audio.start(
+              ringtonePath: alarm.ringtonePath,
+              // On resume we skip the gradual ramp so the user gets the
+              // full alarm immediately — they're already half-aware.
+              gradualVolumeRise: false,
+            ),
+          );
         }
         break;
       case AppLifecycleState.detached:

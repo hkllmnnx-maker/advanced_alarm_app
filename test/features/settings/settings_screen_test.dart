@@ -50,8 +50,9 @@ void main() {
     expect(find.text('Reset all alarms'), findsOneWidget);
   });
 
-  testWidgets('Settings screen renders Arabic strings + RTL direction',
-      (tester) async {
+  testWidgets('Settings screen renders Arabic strings + RTL direction', (
+    tester,
+  ) async {
     final harness = await _buildHarness(locale: const Locale('ar'));
     await tester.pumpWidget(harness);
     await tester.pumpAndSettle();
@@ -61,13 +62,15 @@ void main() {
     expect(find.text('اللغة'), findsOneWidget);
     expect(find.text('حذف جميع المنبهات'), findsOneWidget);
 
-    final directionality =
-        tester.widget<Directionality>(find.byType(Directionality).first);
+    final directionality = tester.widget<Directionality>(
+      find.byType(Directionality).first,
+    );
     expect(directionality.textDirection, TextDirection.rtl);
   });
 
-  testWidgets('Toggling 24h switch updates the provider instantly',
-      (tester) async {
+  testWidgets('Toggling 24h switch updates the provider instantly', (
+    tester,
+  ) async {
     SharedPreferences.setMockInitialValues(<String, Object>{});
     final settings = await SettingsProvider.create();
     expect(settings.use24hFormat, isTrue);

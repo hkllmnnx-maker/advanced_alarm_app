@@ -24,8 +24,10 @@ class EmptyAlarmsView extends StatelessWidget {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints c) {
         // Cap the illustration so it doesn't dominate huge screens.
-        final double illustrationSize =
-            math.min(220.0, c.maxWidth * 0.6).clamp(140.0, 220.0).toDouble();
+        final double illustrationSize = math
+            .min(220.0, c.maxWidth * 0.6)
+            .clamp(140.0, 220.0)
+            .toDouble();
 
         return SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
@@ -155,11 +157,7 @@ class _AlarmIllustrationPainter extends CustomPainter {
 
     // 4. The clock body — primary outer disc with a softer inner face.
     canvas.drawCircle(center, radius, Paint()..color = primary);
-    canvas.drawCircle(
-      center,
-      radius * 0.86,
-      Paint()..color = surface,
-    );
+    canvas.drawCircle(center, radius * 0.86, Paint()..color = surface);
 
     // 5. Tick marks at 12 / 3 / 6 / 9.
     final Paint tickPaint = Paint()
@@ -168,10 +166,10 @@ class _AlarmIllustrationPainter extends CustomPainter {
       ..strokeWidth = radius * 0.06;
     for (int i = 0; i < 4; i++) {
       final double angle = -math.pi / 2 + i * math.pi / 2;
-      final Offset outer = center +
-          Offset(math.cos(angle), math.sin(angle)) * (radius * 0.78);
-      final Offset inner = center +
-          Offset(math.cos(angle), math.sin(angle)) * (radius * 0.66);
+      final Offset outer =
+          center + Offset(math.cos(angle), math.sin(angle)) * (radius * 0.78);
+      final Offset inner =
+          center + Offset(math.cos(angle), math.sin(angle)) * (radius * 0.66);
       canvas.drawLine(inner, outer, tickPaint);
     }
 
@@ -184,19 +182,13 @@ class _AlarmIllustrationPainter extends CustomPainter {
     final Offset hourEnd = center + const Offset(-0.4, -0.55) * 1;
     canvas.drawLine(
       center,
-      Offset(
-        center.dx - radius * 0.38,
-        center.dy - radius * 0.42,
-      ),
+      Offset(center.dx - radius * 0.38, center.dy - radius * 0.42),
       handPaint,
     );
     // Minute hand pointing roughly to 2.
     canvas.drawLine(
       center,
-      Offset(
-        center.dx + radius * 0.55,
-        center.dy - radius * 0.30,
-      ),
+      Offset(center.dx + radius * 0.55, center.dy - radius * 0.30),
       handPaint,
     );
     // Suppress unused-variable warning while keeping intent obvious.
@@ -221,8 +213,7 @@ class _AlarmIllustrationPainter extends CustomPainter {
     )..layout();
     tp.paint(
       canvas,
-      Offset(rightBell.dx + bellRadius * 0.4,
-          rightBell.dy - bellRadius * 1.6),
+      Offset(rightBell.dx + bellRadius * 0.4, rightBell.dy - bellRadius * 1.6),
     );
   }
 

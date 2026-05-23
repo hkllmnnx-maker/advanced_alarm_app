@@ -58,8 +58,7 @@ Future<void> main() async {
       // --- 1. User-facing settings (Agent-07) ---------------------------
       // Loaded first so the UI can pick up the persisted theme + locale
       // on the very first frame (no "flash of English" on Arabic devices).
-      final SettingsProvider settingsProvider =
-          await SettingsProvider.create();
+      final SettingsProvider settingsProvider = await SettingsProvider.create();
 
       // --- 2. Data layer ------------------------------------------------
       bool dataLayerReady = true;
@@ -79,8 +78,9 @@ Future<void> main() async {
       // The Hive-backed [AlarmDatabase] above is already initialized so a
       // dedicated adapter can bridge the two without changing this bootstrap.
       final NotificationService notificationService = NotificationService();
-      final PermissionService permissionService =
-          PermissionService(notificationService.plugin);
+      final PermissionService permissionService = PermissionService(
+        notificationService.plugin,
+      );
       final AlarmRepository engineRepository = InMemoryAlarmRepository();
       final AlarmService alarmService = AlarmService(
         notificationService: notificationService,
@@ -108,7 +108,8 @@ Future<void> main() async {
         MultiProvider(
           providers: [
             ChangeNotifierProvider<SettingsProvider>.value(
-                value: settingsProvider),
+              value: settingsProvider,
+            ),
             // The "Reset all alarms" destructive action in the Settings
             // screen is wired through this controller. Until the data
             // layer exposes a dedicated reset hook we keep the no-op
@@ -187,18 +188,22 @@ class AdvancedAlarmApp extends StatelessWidget {
     // Watch only the slices that the root must rebuild for: theme + locale.
     // Using `select` keeps the rest of the tree from rebuilding when
     // unrelated settings (e.g. default snooze) change.
-    final ThemeMode themeMode =
-        context.select<SettingsProvider, ThemeMode>((p) => p.themeMode);
-    final Locale locale =
-        context.select<SettingsProvider, Locale>((p) => p.locale);
+    final ThemeMode themeMode = context.select<SettingsProvider, ThemeMode>(
+      (p) => p.themeMode,
+    );
+    final Locale locale = context.select<SettingsProvider, Locale>(
+      (p) => p.locale,
+    );
 
     return MaterialApp(
       onGenerateTitle: (BuildContext ctx) {
         // Fall back to AppConstants if the localization delegate hasn't
         // resolved yet (e.g. before the first frame, or in unit tests
         // that don't install the delegate).
-        final AppLocalizations? l =
-            Localizations.of<AppLocalizations>(ctx, AppLocalizations);
+        final AppLocalizations? l = Localizations.of<AppLocalizations>(
+          ctx,
+          AppLocalizations,
+        );
         return l?.appTitle ?? AppConstants.appName;
       },
       debugShowCheckedModeBanner: false,
@@ -213,8 +218,9 @@ class AdvancedAlarmApp extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      home:
-          dataLayerReady ? const HomeScreen() : const _StorageUnavailableView(),
+      home: dataLayerReady
+          ? const HomeScreen()
+          : const _StorageUnavailableView(),
     );
   }
 
@@ -230,8 +236,8 @@ class AdvancedAlarmApp extends StatelessWidget {
     // In debug builds keep Flutter's red screen so developers see the
     // stack trace right away; in release builds show a friendly view.
     if (!kDebugMode) {
-      ErrorWidget.builder =
-          (FlutterErrorDetails _) => const _FriendlyErrorView();
+      ErrorWidget.builder = (FlutterErrorDetails _) =>
+          const _FriendlyErrorView();
     }
   }
 }
@@ -244,9 +250,7 @@ bool get _isTestEnvironment {
   // Outside of tests, [WidgetsBinding.instance] is the
   // [WidgetsFlutterBinding]. We use a string check to avoid pulling
   // test packages into release.
-  return WidgetsBinding.instance.runtimeType
-      .toString()
-      .contains('TestWidgets');
+  return WidgetsBinding.instance.runtimeType.toString().contains('TestWidgets');
 }
 
 /// Shown when the local Hive box could not be opened. The app stays
@@ -267,8 +271,11 @@ class _StorageUnavailableView extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Icon(Icons.error_outline_rounded,
-                    color: scheme.error, size: 64),
+                Icon(
+                  Icons.error_outline_rounded,
+                  color: scheme.error,
+                  size: 64,
+                ),
                 const SizedBox(height: 16),
                 Text(
                   'Storage unavailable',
@@ -308,8 +315,11 @@ class _FriendlyErrorView extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: const <Widget>[
-                Icon(Icons.warning_amber_rounded,
-                    color: Colors.amber, size: 56),
+                Icon(
+                  Icons.warning_amber_rounded,
+                  color: Colors.amber,
+                  size: 56,
+                ),
                 SizedBox(height: 16),
                 Text(
                   'Something went wrong',

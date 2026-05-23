@@ -46,9 +46,7 @@ void main() {
     if (!Hive.isAdapterRegistered(AlarmAdapter().typeId)) {
       Hive.registerAdapter(AlarmAdapter());
     }
-    box = await Hive.openBox<Alarm>(
-      'test_alarms_${tempDir.path.hashCode}',
-    );
+    box = await Hive.openBox<Alarm>('test_alarms_${tempDir.path.hashCode}');
     repository = AlarmRepository(box);
   });
 
@@ -73,7 +71,10 @@ void main() {
       expect(loaded.label, 'Wake up');
       expect(loaded.hour, 7);
       expect(loaded.minute, 30);
-      expect(loaded.repeatDays, equals(<Weekday>{Weekday.monday, Weekday.friday}));
+      expect(
+        loaded.repeatDays,
+        equals(<Weekday>{Weekday.monday, Weekday.friday}),
+      );
       expect(loaded.isEnabled, isTrue);
       expect(loaded.dismissMethod, DismissMethod.tap);
       expect(repository.count(), 1);
@@ -123,8 +124,7 @@ void main() {
       );
     });
 
-    test('toggleEnabled() flips the flag and returns the new value',
-        () async {
+    test('toggleEnabled() flips the flag and returns the new value', () async {
       final Alarm alarm = makeAlarm(isEnabled: true);
       await repository.add(alarm);
 
@@ -161,7 +161,11 @@ void main() {
       await repository.add(makeAlarm(id: 'early', hour: 6, minute: 15));
 
       final List<Alarm> all = repository.getAll();
-      expect(all.map((Alarm a) => a.id).toList(), <String>['early', 'mid', 'late']);
+      expect(all.map((Alarm a) => a.id).toList(), <String>[
+        'early',
+        'mid',
+        'late',
+      ]);
     });
 
     test('getEnabled() filters out disabled alarms', () async {
@@ -276,9 +280,7 @@ void main() {
 
       // Close and reopen the box to force the data through the adapter.
       await box.close();
-      box = await Hive.openBox<Alarm>(
-        'test_alarms_${tempDir.path.hashCode}',
-      );
+      box = await Hive.openBox<Alarm>('test_alarms_${tempDir.path.hashCode}');
       repository = AlarmRepository(box);
 
       final Alarm? rehydrated = repository.getById('persist');
@@ -290,8 +292,7 @@ void main() {
   });
 
   group('Reactive stream', () {
-    test('watchAll() emits an initial snapshot and reacts to writes',
-        () async {
+    test('watchAll() emits an initial snapshot and reacts to writes', () async {
       await repository.add(makeAlarm(id: 'first', hour: 6));
 
       final List<List<Alarm>> emissions = <List<Alarm>>[];
@@ -306,8 +307,10 @@ void main() {
       await repository.add(makeAlarm(id: 'second', hour: 8));
       await Future<void>.delayed(const Duration(milliseconds: 20));
       expect(emissions.last.length, 2);
-      expect(emissions.last.map((Alarm a) => a.id).toList(),
-          <String>['first', 'second']);
+      expect(emissions.last.map((Alarm a) => a.id).toList(), <String>[
+        'first',
+        'second',
+      ]);
 
       // delete → emits again
       await repository.delete('first');

@@ -21,10 +21,7 @@ import 'package:sensors_plus/sensors_plus.dart';
 ///    [_minTimeBetweenShakes] debounce avoids counting a single
 ///    vigorous swing as 5 separate shakes.
 class ShakeDetector {
-  ShakeDetector({
-    this.shakeThresholdGForce = 2.7,
-    this.shakesRequired = 5,
-  });
+  ShakeDetector({this.shakeThresholdGForce = 2.7, this.shakesRequired = 5});
 
   /// Acceleration in g-force (above gravity) required to register a
   /// shake. 2.7 g is a good default: gentle wrist motion is ~1.5 g,
@@ -72,17 +69,18 @@ class ShakeDetector {
     _onProgress = onProgress;
 
     try {
-      _sub = accelerometerEventStream(
-        samplingPeriod: const Duration(milliseconds: 20),
-      ).listen(
-        _onEvent,
-        onError: (Object e, StackTrace st) {
-          if (kDebugMode) {
-            debugPrint('ShakeDetector stream error: $e\n$st');
-          }
-        },
-        cancelOnError: false,
-      );
+      _sub =
+          accelerometerEventStream(
+            samplingPeriod: const Duration(milliseconds: 20),
+          ).listen(
+            _onEvent,
+            onError: (Object e, StackTrace st) {
+              if (kDebugMode) {
+                debugPrint('ShakeDetector stream error: $e\n$st');
+              }
+            },
+            cancelOnError: false,
+          );
     } catch (e) {
       // Sensor might be unavailable (emulator without sensors). The
       // ringing controller falls back to the Snooze button so the

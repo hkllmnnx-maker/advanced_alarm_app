@@ -12,11 +12,7 @@ import '../services/math_puzzle.dart';
 ///   Back — the user must either solve the puzzle or explicitly cancel
 ///   through the "Keep ringing" button.
 class MathPuzzleDialog extends StatefulWidget {
-  const MathPuzzleDialog({
-    super.key,
-    required this.difficulty,
-    this.generator,
-  });
+  const MathPuzzleDialog({super.key, required this.difficulty, this.generator});
 
   final MathPuzzleDifficulty difficulty;
 
@@ -34,10 +30,8 @@ class MathPuzzleDialog extends StatefulWidget {
     final bool? solved = await showDialog<bool>(
       context: context,
       barrierDismissible: false,
-      builder: (BuildContext ctx) => MathPuzzleDialog(
-        difficulty: difficulty,
-        generator: generator,
-      ),
+      builder: (BuildContext ctx) =>
+          MathPuzzleDialog(difficulty: difficulty, generator: generator),
     );
     return solved ?? false;
   }
@@ -93,9 +87,7 @@ class _MathPuzzleDialogState extends State<MathPuzzleDialog> {
       canPop: false,
       child: Dialog(
         insetPadding: const EdgeInsets.symmetric(horizontal: 24),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(24),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
         child: Padding(
           padding: const EdgeInsets.fromLTRB(24, 28, 24, 20),
           child: Column(
@@ -104,17 +96,12 @@ class _MathPuzzleDialogState extends State<MathPuzzleDialog> {
             children: <Widget>[
               const Text(
                 'Solve to dismiss',
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w700,
-                ),
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700),
               ),
               const SizedBox(height: 4),
               Text(
                 'Answer the math problem to stop the alarm.',
-                style: TextStyle(
-                  color: Colors.grey.shade700,
-                ),
+                style: TextStyle(color: Colors.grey.shade700),
               ),
               const SizedBox(height: 24),
               Center(
@@ -131,7 +118,9 @@ class _MathPuzzleDialogState extends State<MathPuzzleDialog> {
               TextField(
                 controller: _controller,
                 focusNode: _focusNode,
-                keyboardType: const TextInputType.numberWithOptions(signed: true),
+                keyboardType: const TextInputType.numberWithOptions(
+                  signed: true,
+                ),
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.allow(RegExp(r'^-?\d{0,6}$')),
                 ],

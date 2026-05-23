@@ -94,12 +94,12 @@ class AppSettings {
 
   @override
   int get hashCode => Object.hash(
-        themeMode,
-        language,
-        use24hFormat,
-        defaultSnoozeMinutes,
-        defaultRingtone,
-      );
+    themeMode,
+    language,
+    use24hFormat,
+    defaultSnoozeMinutes,
+    defaultRingtone,
+  );
 }
 
 /// Catalog of allowed snooze durations exposed in the UI.

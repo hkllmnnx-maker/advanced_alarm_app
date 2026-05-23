@@ -17,7 +17,8 @@ class AlarmRepositoryException implements Exception {
   final StackTrace? stackTrace;
 
   @override
-  String toString() => 'AlarmRepositoryException: $message'
+  String toString() =>
+      'AlarmRepositoryException: $message'
       '${cause == null ? '' : ' (cause: $cause)'}';
 }
 
@@ -130,9 +131,7 @@ class AlarmRepository {
     _validate(alarm);
     try {
       if (!_box.containsKey(alarm.id)) {
-        throw AlarmRepositoryException(
-          'No alarm found with id "${alarm.id}".',
-        );
+        throw AlarmRepositoryException('No alarm found with id "${alarm.id}".');
       }
       final Alarm toStore = keepTimestamp
           ? alarm
@@ -242,12 +241,14 @@ class AlarmRepository {
     controller = StreamController<Alarm?>(
       onListen: () {
         emit();
-        sub = _box.watch(key: id).listen(
-          (_) => emit(),
-          onError: (Object e, StackTrace s) =>
-              _logError('watchById($id)', e, s),
-          cancelOnError: false,
-        );
+        sub = _box
+            .watch(key: id)
+            .listen(
+              (_) => emit(),
+              onError: (Object e, StackTrace s) =>
+                  _logError('watchById($id)', e, s),
+              cancelOnError: false,
+            );
       },
       onCancel: () async {
         await sub?.cancel();
@@ -277,9 +278,7 @@ class AlarmRepository {
       );
     }
     if (alarm.snoozeDurationMinutes < 0) {
-      throw AlarmRepositoryException(
-        'snoozeDurationMinutes must be >= 0.',
-      );
+      throw AlarmRepositoryException('snoozeDurationMinutes must be >= 0.');
     }
     if (alarm.snoozeCount < 0) {
       throw AlarmRepositoryException('snoozeCount must be >= 0.');

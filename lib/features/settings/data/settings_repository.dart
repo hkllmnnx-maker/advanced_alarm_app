@@ -23,8 +23,10 @@ class SettingsRepository {
   AppSettings load() {
     final theme = _readThemeMode();
     final lang = AppLanguage.fromCode(_prefs.getString(_kLanguage));
-    final use24h = _prefs.getBool(_kUse24h) ?? AppSettings.defaults.use24hFormat;
-    final snooze = _prefs.getInt(_kSnoozeMinutes) ??
+    final use24h =
+        _prefs.getBool(_kUse24h) ?? AppSettings.defaults.use24hFormat;
+    final snooze =
+        _prefs.getInt(_kSnoozeMinutes) ??
         AppSettings.defaults.defaultSnoozeMinutes;
     final ringtone = DefaultRingtone.fromName(_prefs.getString(_kRingtone));
 

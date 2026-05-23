@@ -52,10 +52,8 @@ class RingingScreen extends StatefulWidget {
     return MaterialPageRoute<RingingResult>(
       fullscreenDialog: true,
       settings: RouteSettings(name: 'ringing/${payload.alarm.id}'),
-      builder: (BuildContext context) => RingingScreen(
-        payload: payload,
-        controllerFactory: controllerFactory,
-      ),
+      builder: (BuildContext context) =>
+          RingingScreen(payload: payload, controllerFactory: controllerFactory),
     );
   }
 
@@ -74,7 +72,9 @@ class _RingingScreenState extends State<RingingScreen>
   @override
   void initState() {
     super.initState();
-    _controller = (widget.controllerFactory ?? _defaultController)(widget.payload);
+    _controller = (widget.controllerFactory ?? _defaultController)(
+      widget.payload,
+    );
     _controller.addListener(_onControllerChanged);
 
     _pulse = AnimationController(
@@ -84,9 +84,7 @@ class _RingingScreenState extends State<RingingScreen>
 
     // Immersive sticky so the system bars don't distract — but we
     // restore them in dispose() so the rest of the app isn't affected.
-    SystemChrome.setEnabledSystemUIMode(
-      SystemUiMode.immersiveSticky,
-    );
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
 
     // Start the engine after the first frame so the screen is already
     // visible by the time audio kicks in (better UX, and gives the
@@ -117,9 +115,7 @@ class _RingingScreenState extends State<RingingScreen>
     // guaranteeing no resource leaks regardless of how this screen
     // exits (back button, system kill, programmatic pop).
     _controller.dispose();
-    SystemChrome.setEnabledSystemUIMode(
-      SystemUiMode.edgeToEdge,
-    );
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     super.dispose();
   }
 
@@ -278,111 +274,112 @@ class _RingingScreenState extends State<RingingScreen>
                       ),
                       child: IntrinsicHeight(
                         child: Column(
-                children: <Widget>[
-                  const Spacer(flex: 2),
-                  // Pulsing bell icon.
-                  ScaleTransition(
-                    scale: Tween<double>(begin: 0.92, end: 1.08).animate(
-                      CurvedAnimation(
-                        parent: _pulse,
-                        curve: Curves.easeInOut,
-                      ),
-                    ),
-                    child: Container(
-                      width: 120,
-                      height: 120,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: cs.primary.withValues(alpha: 0.18),
-                        border: Border.all(
-                          color: cs.primary.withValues(alpha: 0.5),
-                          width: 2,
-                        ),
-                      ),
-                      child: Icon(
-                        Icons.alarm,
-                        size: 64,
-                        color: cs.primary,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 32),
-                  // Live time.
-                  Text(
-                    _formatTime(_now),
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 84,
-                      fontWeight: FontWeight.w300,
-                      letterSpacing: 2,
-                      height: 1,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    _formatDate(_now),
-                    style: TextStyle(
-                      color: Colors.white.withValues(alpha: 0.7),
-                      fontSize: 18,
-                      fontWeight: FontWeight.w400,
-                      letterSpacing: 1,
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-                  // Alarm label.
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 12,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.10),
-                      borderRadius: BorderRadius.circular(32),
-                      border: Border.all(
-                        color: Colors.white.withValues(alpha: 0.16),
-                      ),
-                    ),
-                    child: Text(
-                      label,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 22,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      textAlign: TextAlign.center,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    _dismissHint(widget.payload.alarm.dismissMethod),
-                    style: TextStyle(
-                      color: Colors.white.withValues(alpha: 0.6),
-                      fontSize: 14,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const Spacer(flex: 3),
-                  BigActionButton(
-                    label: 'Snooze',
-                    icon: Icons.snooze,
-                    color: const Color(0xFF455A64),
-                    onPressed: () async {
-                      await _controller.snooze();
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  BigActionButton(
-                    label: 'Dismiss',
-                    icon: Icons.alarm_off,
-                    color: cs.primary,
-                    onPressed: () async {
-                      await _controller.requestDismiss();
-                    },
-                  ),
-                  const SizedBox(height: 12),
-                ],
+                          children: <Widget>[
+                            const Spacer(flex: 2),
+                            // Pulsing bell icon.
+                            ScaleTransition(
+                              scale: Tween<double>(begin: 0.92, end: 1.08)
+                                  .animate(
+                                    CurvedAnimation(
+                                      parent: _pulse,
+                                      curve: Curves.easeInOut,
+                                    ),
+                                  ),
+                              child: Container(
+                                width: 120,
+                                height: 120,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: cs.primary.withValues(alpha: 0.18),
+                                  border: Border.all(
+                                    color: cs.primary.withValues(alpha: 0.5),
+                                    width: 2,
+                                  ),
+                                ),
+                                child: Icon(
+                                  Icons.alarm,
+                                  size: 64,
+                                  color: cs.primary,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 32),
+                            // Live time.
+                            Text(
+                              _formatTime(_now),
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 84,
+                                fontWeight: FontWeight.w300,
+                                letterSpacing: 2,
+                                height: 1,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              _formatDate(_now),
+                              style: TextStyle(
+                                color: Colors.white.withValues(alpha: 0.7),
+                                fontSize: 18,
+                                fontWeight: FontWeight.w400,
+                                letterSpacing: 1,
+                              ),
+                            ),
+                            const SizedBox(height: 24),
+                            // Alarm label.
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 20,
+                                vertical: 12,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withValues(alpha: 0.10),
+                                borderRadius: BorderRadius.circular(32),
+                                border: Border.all(
+                                  color: Colors.white.withValues(alpha: 0.16),
+                                ),
+                              ),
+                              child: Text(
+                                label,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                textAlign: TextAlign.center,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            Text(
+                              _dismissHint(widget.payload.alarm.dismissMethod),
+                              style: TextStyle(
+                                color: Colors.white.withValues(alpha: 0.6),
+                                fontSize: 14,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            const Spacer(flex: 3),
+                            BigActionButton(
+                              label: 'Snooze',
+                              icon: Icons.snooze,
+                              color: const Color(0xFF455A64),
+                              onPressed: () async {
+                                await _controller.snooze();
+                              },
+                            ),
+                            const SizedBox(height: 16),
+                            BigActionButton(
+                              label: 'Dismiss',
+                              icon: Icons.alarm_off,
+                              color: cs.primary,
+                              onPressed: () async {
+                                await _controller.requestDismiss();
+                              },
+                            ),
+                            const SizedBox(height: 12),
+                          ],
                         ),
                       ),
                     ),

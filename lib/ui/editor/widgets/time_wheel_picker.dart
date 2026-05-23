@@ -22,8 +22,8 @@ class TimeWheelPicker extends StatefulWidget {
     required this.onChanged,
     this.itemExtent = 44,
     this.visibleItemCount = 5,
-  })  : assert(itemExtent > 0, 'itemExtent must be > 0'),
-        assert(visibleItemCount > 0, 'visibleItemCount must be > 0');
+  }) : assert(itemExtent > 0, 'itemExtent must be > 0'),
+       assert(visibleItemCount > 0, 'visibleItemCount must be > 0');
 
   final int initialHour;
   final int initialMinute;
@@ -196,9 +196,7 @@ class _Wheel extends StatelessWidget {
               labelBuilder(i),
               style: theme.textTheme.headlineMedium?.copyWith(
                 fontWeight: FontWeight.w600,
-                fontFeatures: const <FontFeature>[
-                  FontFeature.tabularFigures(),
-                ],
+                fontFeatures: const <FontFeature>[FontFeature.tabularFigures()],
               ),
             ),
           );

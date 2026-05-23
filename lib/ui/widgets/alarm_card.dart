@@ -51,10 +51,12 @@ class AlarmCard extends StatelessWidget {
       alarm.hour,
       alarm.minute,
     );
-    final String repeatSummary =
-        AlarmFormatting.repeatSummary(alarm.repeatDays);
-    final List<Weekday> orderedDays =
-        AlarmFormatting.orderedDays(alarm.repeatDays);
+    final String repeatSummary = AlarmFormatting.repeatSummary(
+      alarm.repeatDays,
+    );
+    final List<Weekday> orderedDays = AlarmFormatting.orderedDays(
+      alarm.repeatDays,
+    );
 
     final String semanticLabel = <String>[
       'Alarm at $timeString',
@@ -176,10 +178,7 @@ class _RepeatRow extends StatelessWidget {
 
     // High-level named pattern → single pill.
     if (_namedPatterns.contains(repeatSummary)) {
-      return _Pill(
-        label: repeatSummary,
-        emphasized: isEnabled,
-      );
+      return _Pill(label: repeatSummary, emphasized: isEnabled);
     }
 
     // Custom subset → small wrap of per-day chips.
@@ -222,9 +221,9 @@ class _Pill extends StatelessWidget {
       child: Text(
         label,
         style: Theme.of(context).textTheme.labelMedium?.copyWith(
-              color: fg,
-              fontWeight: FontWeight.w600,
-            ),
+          color: fg,
+          fontWeight: FontWeight.w600,
+        ),
       ),
     );
   }
@@ -260,10 +259,10 @@ class _DayChip extends StatelessWidget {
       child: Text(
         label,
         style: Theme.of(context).textTheme.labelSmall?.copyWith(
-              color: fg,
-              fontWeight: FontWeight.w700,
-              letterSpacing: 0.4,
-            ),
+          color: fg,
+          fontWeight: FontWeight.w700,
+          letterSpacing: 0.4,
+        ),
       ),
     );
   }

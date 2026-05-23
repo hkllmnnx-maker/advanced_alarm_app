@@ -20,9 +20,7 @@ class SettingsScreen extends StatelessWidget {
     final settings = context.watch<SettingsProvider>();
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.settingsTitle),
-      ),
+      appBar: AppBar(title: Text(l10n.settingsTitle)),
       body: ListView(
         children: [
           _SectionHeader(label: l10n.sectionAppearance),
@@ -248,9 +246,9 @@ class _DefaultSnoozeTile extends StatelessWidget {
           },
         );
         if (selected != null && context.mounted) {
-          await context
-              .read<SettingsProvider>()
-              .setDefaultSnoozeMinutes(selected);
+          await context.read<SettingsProvider>().setDefaultSnoozeMinutes(
+            selected,
+          );
         }
       },
     );
@@ -308,9 +306,7 @@ class _DefaultRingtoneTile extends StatelessWidget {
           },
         );
         if (selected != null && context.mounted) {
-          await context
-              .read<SettingsProvider>()
-              .setDefaultRingtone(selected);
+          await context.read<SettingsProvider>().setDefaultRingtone(selected);
         }
       },
     );
@@ -372,9 +368,7 @@ class _ResetAlarmsTile extends StatelessWidget {
     final controller = context.read<AlarmsResetController>();
     await controller.resetAllAlarms();
 
-    messenger.showSnackBar(
-      SnackBar(content: Text(l10n.alarmsResetSnack)),
-    );
+    messenger.showSnackBar(SnackBar(content: Text(l10n.alarmsResetSnack)));
   }
 }
 
