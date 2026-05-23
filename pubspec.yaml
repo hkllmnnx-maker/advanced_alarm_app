@@ -31,7 +31,11 @@ dependencies:
   path_provider: ^2.1.4
 
   # --- State management ---
+  # provider is retained from earlier branches for non-UI consumers.
+  # flutter_riverpod is the primary state binding for the UI layer
+  # (Agent-04: home_screen + alarm_providers).
   provider: ^6.1.2
+  flutter_riverpod: ^2.5.1
 
   # --- Internationalization / formatting ---
   intl: ^0.19.0
