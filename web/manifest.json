@@ -1,11 +1,11 @@
 {
-    "name": "advanced_alarm_app",
-    "short_name": "advanced_alarm_app",
+    "name": "Advanced Alarm",
+    "short_name": "Alarm",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#101827",
+    "theme_color": "#F59E0B",
+    "description": "Advanced Alarm App with reliable scheduling, local persistence, modern UI, and full-screen ringing experience.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
