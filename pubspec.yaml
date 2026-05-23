@@ -43,6 +43,10 @@ dependencies:
   # --- Audio playback (alarm sounds) ---
   audioplayers: ^6.1.0
 
+  # --- ID generation (Agent-05: ui-editor) ---
+  # uuid: generates stable unique ids for newly created alarms.
+  uuid: ^4.5.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
