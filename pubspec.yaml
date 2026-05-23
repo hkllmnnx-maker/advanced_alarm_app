@@ -1,21 +1,16 @@
 name: advanced_alarm_app
-description: "A new Flutter project."
-# The following line prevents the package from being accidentally published to
-# pub.dev using `flutter pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+description: "Advanced Alarm App — full-featured alarm app with Hive storage, Riverpod state, and rich ringing experience."
+publish_to: 'none'
 
-# The following defines the version and build number for your application.
 version: 1.0.0+1
 
 environment:
   sdk: ^3.9.2
 
-# Dependencies specify other packages that your package needs in order to work.
 dependencies:
   flutter:
     sdk: flutter
 
-  # The following adds the Cupertino Icons font to your application.
   cupertino_icons: ^1.0.8
 
   # ---------------- Data Layer (Agent-02) ----------------
@@ -33,6 +28,23 @@ dependencies:
   # Binds the UI to the AlarmRepository stream without manual wiring.
   flutter_riverpod: ^2.5.1
 
+  # ---------------- UI Editor (Agent-05) ----------------
+  # uuid: generates stable unique ids for newly created alarms.
+  uuid: ^4.5.1
+
+  # ---------------- Ringing Experience (Agent-06) ----------------
+  # Audio playback for the alarm sound — supports duck/loss/release events.
+  audioplayers: ^6.1.0
+
+  # Vibration with custom patterns + per-pattern amplitude.
+  vibration: ^2.0.0
+
+  # Keeps the screen awake while the alarm is ringing.
+  wakelock_plus: ^1.2.8
+
+  # Accelerometer stream used to detect a "shake to dismiss" gesture.
+  sensors_plus: ^6.0.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -40,9 +52,6 @@ dev_dependencies:
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices.
   flutter_lints: ^5.0.0
-
-# For information on the generic Dart part of this file, see the
-# following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter packages.
 flutter:
