@@ -1,5 +1,5 @@
 name: advanced_alarm_app
-description: "Advanced Alarm App - foundational scaffold (no business logic yet)."
+description: "Advanced Alarm App - foundational scaffold with reliable scheduling, modern UI and full localization."
 publish_to: 'none'
 version: 1.0.0+1
 
@@ -20,8 +20,13 @@ dependencies:
   permission_handler: ^11.3.1
 
   # --- Local storage (document DB) ---
-  hive: ^2.2.3
-  hive_flutter: ^1.1.0
+  # Hive pinned to exact tested versions (no codegen, manual TypeAdapter).
+  hive: 2.2.3
+  hive_flutter: 1.1.0
+
+  # path_provider: used by Hive to resolve the documents directory on
+  # mobile platforms during normal app runtime (initFlutter()).
+  path_provider: ^2.1.4
 
   # --- State management ---
   provider: ^6.1.2
