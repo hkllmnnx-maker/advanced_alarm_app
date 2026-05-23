@@ -1,41 +1,45 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- ===================================================================== -->
-    <!-- Permissions required by the Advanced Alarm App                        -->
-    <!-- ===================================================================== -->
+    <!-- =================================================================== -->
+    <!-- Permissions required by the alarm scheduling engine                  -->
+    <!-- =================================================================== -->
 
-    <!-- Notifications (Android 13+) -->
+    <!-- Posting notifications (Android 13+) -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
-    <!-- Exact alarms (Android 12+) -->
+    <!-- Vibrate when an alarm fires -->
+    <uses-permission android:name="android.permission.VIBRATE"/>
+
+    <!-- Wake the device when an alarm fires -->
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+
+    <!-- Required by flutter_local_notifications to deliver scheduled
+         notifications at the *exact* requested time (Android 12 / API 31+).
+         SCHEDULE_EXACT_ALARM is the user-revocable variant – we still ask
+         for USE_EXACT_ALARM as a normal install-time alternative because
+         this app is a primary alarm clock. -->
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
     <uses-permission android:name="android.permission.USE_EXACT_ALARM"/>
 
-    <!-- Allow the app to run alarms even when the device is idle / dozing -->
-    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/>
-
-    <!-- Wake the device when the alarm fires -->
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
-
-    <!-- Reschedule alarms after the device reboots -->
+    <!-- Required by android_alarm_manager_plus on older OEM builds -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
-    <!-- Vibration support for alarms -->
-    <uses-permission android:name="android.permission.VIBRATE"/>
-
-    <!-- Foreground audio service (so alarm sound keeps playing in background) -->
+    <!-- Foreground service that keeps the alarm UI alive when fired -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE"/>
 
-    <!-- Show full-screen alarm UI over the lock screen -->
+    <!-- Full-screen intent: lets us launch the alarm screen over the lock
+         screen on Android 14+ -->
     <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT"/>
-    <uses-permission android:name="android.permission.DISABLE_KEYGUARD"/>
 
-    <!-- Audio focus / media playback -->
-    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
+    <!-- Request the user to whitelist us from battery optimization so that
+         alarms still fire while the device is in Doze mode -->
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/>
 
-    <!-- Internet access (kept for future feature work, harmless to declare) -->
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- Permission to read audio files for custom alarm sounds (Android 13+) -->
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO"/>
 
     <application
         android:label="advanced_alarm_app"
@@ -66,17 +70,47 @@
             </intent-filter>
         </activity>
 
-        <!-- ============================================================= -->
-        <!-- flutter_local_notifications: required receivers / services    -->
-        <!-- ============================================================= -->
+        <!-- =============================================================== -->
+        <!-- flutter_local_notifications: receivers for scheduled / boot     -->
+        <!-- redelivery of notifications.                                    -->
+        <!-- =============================================================== -->
 
+        <!-- Fires when a scheduled local notification is due. -->
         <receiver
             android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver"
-            android:exported="false"/>
+            android:exported="false" />
 
+        <!-- Re-schedules pending notifications after the device reboots
+             (handled by flutter_local_notifications internally). -->
         <receiver
             android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver"
             android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
+                <action android:name="android.intent.action.QUICKBOOT_POWERON"/>
+                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON"/>
+            </intent-filter>
+        </receiver>
+
+        <!-- Notification action receiver (snooze / dismiss from the notification
+             without opening the app). -->
+        <receiver
+            android:name="com.dexterous.flutterlocalnotifications.ActionBroadcastReceiver"
+            android:exported="false" />
+
+        <!-- =============================================================== -->
+        <!-- android_alarm_manager_plus: alarm services / receivers.         -->
+        <!-- These are declared automatically by the plugin's manifest merger -->
+        <!-- but we redeclare RebootBroadcastReceiver explicitly so the      -->
+        <!-- AlarmService API can reschedule everything after a reboot       -->
+        <!-- triggered by our own AlarmService.rescheduleAll() bootstrap.    -->
+        <!-- =============================================================== -->
+        <receiver
+            android:name="dev.fluttercommunity.plus.androidalarmmanager.RebootBroadcastReceiver"
+            android:enabled="true"
+            android:exported="false"
+            tools:replace="android:exported">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
@@ -91,6 +125,7 @@
             android:name="flutterEmbedding"
             android:value="2" />
     </application>
+
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and
          https://developer.android.com/reference/android/content/Intent#ACTION_PROCESS_TEXT.
