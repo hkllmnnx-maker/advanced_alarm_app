@@ -11,25 +11,26 @@ android {
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
-        // Required by `flutter_local_notifications` (uses java.time on legacy APIs)
+        // android_alarm_manager_plus uses java.time.* APIs that require core
+        // library desugaring on minSdk < 26.
         isCoreLibraryDesugaringEnabled = true
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
 
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
+        jvmTarget = JavaVersion.VERSION_11.toString()
     }
 
     defaultConfig {
         applicationId = "com.example.advanced_alarm_app"
-        // Aligned with the lowest SDK required by our core plugins
-        // (flutter_local_notifications, permission_handler, audioplayers).
-        minSdk = flutter.minSdkVersion
+        // android_alarm_manager_plus and flutter_local_notifications both
+        // require a minimum SDK of 24 (Android 7.0).
+        minSdk = 24
         targetSdk = flutter.targetSdkVersion
-        multiDexEnabled = true
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        multiDexEnabled = true
     }
 
     buildTypes {
@@ -46,6 +47,7 @@ flutter {
 }
 
 dependencies {
-    // Core library desugaring (required by flutter_local_notifications)
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
+    // Required by `isCoreLibraryDesugaringEnabled = true` above. Without this,
+    // android_alarm_manager_plus will fail to compile on minSdk < 26.
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
 }

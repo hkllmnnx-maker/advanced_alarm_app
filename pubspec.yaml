@@ -1,5 +1,5 @@
 name: advanced_alarm_app
-description: "Advanced Alarm App - foundational scaffold with reliable scheduling, modern UI and full localization."
+description: "Advanced Alarm App - reliable scheduling engine, local persistence, modern UI and full localization."
 publish_to: 'none'
 version: 1.0.0+1
 
@@ -14,7 +14,9 @@ dependencies:
 
   # --- Notifications & scheduling ---
   flutter_local_notifications: ^17.2.3
+  android_alarm_manager_plus: ^4.0.7
   timezone: ^0.9.4
+  flutter_timezone: ^3.0.1
 
   # --- Permissions ---
   permission_handler: ^11.3.1
