@@ -11,8 +11,18 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  # Material/Cupertino/Widgets localizations + RTL plumbing required by
+  # the Settings screen (Agent-07) for full Arabic + English support.
+  flutter_localizations:
+    sdk: flutter
 
   cupertino_icons: ^1.0.8
+
+  # --- Settings persistence (Agent-07) ---
+  # Lightweight key-value storage for user-facing preferences such as
+  # theme mode, language, 24h time format, default snooze duration and
+  # default ringtone.
+  shared_preferences: ^2.3.2
 
   # --- Notifications & scheduling ---
   flutter_local_notifications: ^17.2.3
@@ -40,7 +50,9 @@ dependencies:
   flutter_riverpod: ^2.5.1
 
   # --- Internationalization / formatting ---
-  intl: ^0.19.0
+  # Pinned to the version bundled with `flutter_localizations` from
+  # the Flutter 3.35.4 SDK (see https://dart.dev/go/sdk-version-pinning).
+  intl: ^0.20.2
 
   # --- Audio playback (alarm sounds) ---
   # Supports duck/loss/release events which we use to handle incoming
@@ -68,3 +80,8 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  # Enable the ARB → AppLocalizations generator (Agent-07: feat/settings).
+  # The actual generated files (`lib/l10n/app_localizations*.dart`) are
+  # checked-in so the project also builds when running without
+  # `flutter pub get` regeneration (e.g. on the build farm).
+  generate: true

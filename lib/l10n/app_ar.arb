@@ -1,0 +1,51 @@
+{
+  "@@locale": "ar",
+
+  "appTitle": "المنبه المتقدم",
+  "settingsTitle": "الإعدادات",
+  "sectionAppearance": "المظهر",
+  "sectionAlarms": "المنبهات",
+  "sectionDanger": "إجراءات خطرة",
+
+  "themeMode": "السمة",
+  "themeSystem": "وضع النظام",
+  "themeLight": "فاتح",
+  "themeDark": "داكن",
+
+  "language": "اللغة",
+  "languageArabic": "العربية",
+  "languageEnglish": "الإنجليزية",
+
+  "timeFormat": "تنسيق الوقت",
+  "timeFormat24": "24 ساعة",
+  "timeFormat12": "12 ساعة",
+
+  "defaultSnooze": "مدة الغفوة الافتراضية",
+  "snoozeMinutes": "{minutes, plural, =1{دقيقة واحدة} =2{دقيقتان} few{{minutes} دقائق} many{{minutes} دقيقة} other{{minutes} دقيقة}}",
+  "@snoozeMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+
+  "defaultRingtone": "نغمة المنبه الافتراضية",
+  "ringtoneClassic": "جرس كلاسيكي",
+  "ringtoneDigital": "صفير رقمي",
+  "ringtoneGentle": "أنغام هادئة",
+  "ringtoneRooster": "صياح الديك",
+  "ringtoneOcean": "أمواج المحيط",
+
+  "resetAllAlarms": "حذف جميع المنبهات",
+  "resetAllAlarmsDescription": "حذف نهائي لجميع المنبهات. لا يمكن التراجع عن هذا الإجراء.",
+  "resetConfirmTitle": "حذف جميع المنبهات؟",
+  "resetConfirmMessage": "سيتم حذف جميع المنبهات نهائياً. لا يمكن التراجع عن هذا الإجراء.",
+
+  "cancel": "إلغاء",
+  "delete": "حذف",
+
+  "alarmsResetSnack": "تم حذف جميع المنبهات.",
+  "comingSoon": "قريباً",
+  "homeNoSettingsHint": "اضغط على أيقونة الترس لفتح الإعدادات."
+}

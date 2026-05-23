@@ -1,11 +1,19 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+// Restrict the flutter_riverpod import surface to just [ProviderScope]
+// so it doesn't clash with `package:provider`'s [Provider] /
+// [ChangeNotifierProvider] which we use for the settings layer.
+import 'package:flutter_riverpod/flutter_riverpod.dart' show ProviderScope;
+import 'package:provider/provider.dart';
 
 import 'core/constants/app_constants.dart';
 import 'core/services/services.dart';
 import 'data/database/alarm_database.dart';
+import 'features/settings/data/alarms_reset_controller.dart';
+import 'features/settings/providers/settings_provider.dart';
+import 'l10n/app_localizations.dart';
 import 'ui/screens/home_screen.dart';
 import 'ui/theme/app_theme.dart';
 
@@ -25,6 +33,11 @@ import 'ui/theme/app_theme.dart';
 /// not part of normal app startup.
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // --- 0. User-facing settings (Agent-07) ---------------------------------
+  // Loaded first so the UI can pick up the persisted theme + locale on
+  // the very first frame (no "flash of English" on Arabic devices).
+  final SettingsProvider settingsProvider = await SettingsProvider.create();
 
   // --- 1. Data layer -------------------------------------------------------
   bool dataLayerReady = true;
@@ -64,11 +77,28 @@ Future<void> main() async {
   }
 
   runApp(
-    ProviderScope(
-      child: AdvancedAlarmApp(
-        dataLayerReady: dataLayerReady,
-        alarmService: alarmService,
-        permissionService: permissionService,
+    // Provider tree (Agent-07 settings layer) wraps the Riverpod scope
+    // so anything inside — including the alarm engine UI — can `watch`
+    // theme / locale changes synchronously.
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider<SettingsProvider>.value(value: settingsProvider),
+        // The "Reset all alarms" destructive action in the Settings
+        // screen is wired through this controller. Until the data layer
+        // exposes a dedicated reset hook we keep the no-op binding so
+        // the UI stays testable; the merge from feat/qa-hardening / the
+        // data layer is expected to replace this with a Hive-backed
+        // implementation.
+        Provider<AlarmsResetController>.value(
+          value: const NoopAlarmsResetController(),
+        ),
+      ],
+      child: ProviderScope(
+        child: AdvancedAlarmApp(
+          dataLayerReady: dataLayerReady,
+          alarmService: alarmService,
+          permissionService: permissionService,
+        ),
       ),
     ),
   );
@@ -111,12 +141,35 @@ class AdvancedAlarmApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Watch only the slices that the root must rebuild for: theme + locale.
+    // Using `select` keeps the rest of the tree from rebuilding when
+    // unrelated settings (e.g. default snooze) change.
+    final ThemeMode themeMode =
+        context.select<SettingsProvider, ThemeMode>((p) => p.themeMode);
+    final Locale locale =
+        context.select<SettingsProvider, Locale>((p) => p.locale);
+
     return MaterialApp(
-      title: AppConstants.appName,
+      onGenerateTitle: (BuildContext ctx) {
+        // Fall back to AppConstants if the localization delegate hasn't
+        // resolved yet (e.g. before the first frame, or in unit tests
+        // that don't install the delegate).
+        final AppLocalizations? l =
+            Localizations.of<AppLocalizations>(ctx, AppLocalizations);
+        return l?.appTitle ?? AppConstants.appName;
+      },
       debugShowCheckedModeBanner: false,
       theme: AppTheme.light(),
       darkTheme: AppTheme.dark(),
-      themeMode: ThemeMode.system,
+      themeMode: themeMode,
+      locale: locale,
+      supportedLocales: AppLocalizations.supportedLocales,
+      localizationsDelegates: const <LocalizationsDelegate<Object>>[
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
       home:
           dataLayerReady ? const HomeScreen() : const _StorageUnavailableView(),
     );
